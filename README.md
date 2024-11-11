@@ -6,6 +6,8 @@ The tool is written in Python and requires Python 3 but no additional library.
 
 For further information, see the [Wiki](https://github.com/attardi/wikiextractor/wiki).
 
+This repository works in: `Python 3.12.5`, `pip 24.2`
+
 # Wikipedia Cirrus Extractor
 
 `cirrus-extractor.py` is a version of the script that performs extraction from a Wikipedia Cirrus dump.
@@ -119,6 +121,51 @@ Option `--no-templates` significantly speeds up the extractor, avoiding the cost
 of expanding [MediaWiki templates](https://www.mediawiki.org/wiki/Help:Templates).
 
 For further information, visit [the documentation](http://attardi.github.io/wikiextractor).
+
+## For LipsLog Members
+1. Download Japanese Wikipedia dump.
+```
+curl https://dumps.wikimedia.org/jawiki/latest/jawiki-latest-pages-articles.xml.bz2 -o jawiki-latest-pages-articles.xml.bz2
+```
+
+2. Clone this repository.
+```
+git clone https://github.com/LipsLog/wikiextractor.git
+```
+
+3. Extract Wikipedia dump.
+Adding `--no-templates` will significantly speed up the execution.
+As for Nov 2024, directories from AA to CP will be created.
+```
+python -m wikiextractor.WikiExtractor jawiki-latest-pages-articles.xml.bz2 --no-templates
+```
+
+4. Compile the text file into wiki.txt.
+```
+$ find text/ | grep wiki | awk '{system("cat "$0" >> wiki.txt")}'
+```
+
+5. Check the first 100 lines.
+You can see that there are unnecessary doc tags and blank lines.
+```
+head -n100 wiki.txt
+```
+
+6. Remove the doc tags and blank lines.
+```
+$ sed -i '' '/^<[^>]*>$/d' wiki.txt
+$ sed -i '' '/^$/d' wiki.txt 
+```
+
+7. Check the first 100 lines.
+```
+head -n100 wiki.txt
+```
+
+8. Check the number of lines and characters.
+```
+wc -ml wiki.txt
+```
 
 ### Cirrus Extractor
 
